@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تخته نرد آنلاین و آفلاین</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1a1a1a, #2c3e50);
+            color: #fff;
+            font-family: Tahoma, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        h1 {
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+            color: #f39c12;
+        }
+        .game-container {
+            width: 90%;
+            max-width: 650px;
+            background: #8e44ad;
+            border: 8px solid #4a235a;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            position: relative;
+        }
+        .board-row {
+            display: flex;
+            justify-content: space-between;
+            height: 220px;
+        }
+        .quadrant {
+            display: flex;
+            width: 45%;
+            justify-content: space-around;
+            background: #d7bde2;
+            border: 2px solid #5b2c6f;
+        }
+        .bar {
+            width: 6%;
+            background: #5b2c6f;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .point {
+            width: 14.28%;
+            height: 100%;
+            position: relative;
+        }
+        /* طراحی مثلث‌های تخته نرد */
+        .point.top::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 140px solid #273746;
+        }
+        .point.top.alt::after {
+            border-top-color: #ecf0f1;
+        }
+        .point.bottom::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 140px solid #273746;
+        }
+        .point.bottom.alt::after {
+            border-bottom-color: #ecf0f1;
+        }
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #f39c12;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #d68910;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>تخته نرد حرفه‌ای</h1>
+    
+    <div class="game-container">
+        <!-- ردیف بالای تخته (خانه ۶ تا ۱۲) -->
+        <div class="board-row">
+            <div class="quadrant">
+                <div class="point top alt"></div>
+                <div class="point top"></div>
+                <div class="point top alt"></div>
+                <div class="point top"></div>
+                <div class="point top alt"></div>
+                <div class="point top"></div>
+            </div>
+            <div class="bar"></div>
+            <div class="quadrant">
+                <div class="point top alt"></div>
+                <div class="point top"></div>
+                <div class="point top alt"></div>
+                <div class="point top"></div>
+                <div class="point top alt"></div>
+                <div class="point top"></div>
+            </div>
+        </div>
+
+        <!-- ردیف پایین تخته (خانه ۱۳ تا ۲۴) -->
+        <div class="board-row" style="margin-top: 10px;">
+            <div class="quadrant">
+                <div class="point bottom"></div>
+                <div class="point bottom alt"></div>
+                <div class="point bottom"></div>
+                <div class="point bottom alt"></div>
+                <div class="point bottom"></div>
+                <div class="point bottom alt"></div>
+            </div>
+            <div class="bar"></div>
+            <div class="quadrant">
+                <div class="point bottom"></div>
+                <div class="point bottom alt"></div>
+                <div class="point bottom"></div>
+                <div class="point bottom alt"></div>
+                <div class="point bottom"></div>
+                <div class="point bottom alt"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button onclick="startSinglePlayer()">بازی تک‌نفره (با ربات)</button>
+        <button onclick="startOnlineGame()">بازی دو نفره آنلاین</button>
+    </div>
+
+    <script>
+        function startSinglePlayer() {
+            alert("حالت تک‌نفره و هوش مصنوعی فعال شد.");
+        }
+
+        function startOnlineGame() {
+            alert("جستجو برای یافتن حریف آنلاین...");
+        }
+    </script>
+
+</body>
+</html>
