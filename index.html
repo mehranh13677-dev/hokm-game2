@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حکم حرفه‌ای | کاریز طب</title>
+    <style>
+        body { margin: 0; background: radial-gradient(circle, #0a5f22 0%, #031a0a 100%); color: #fff; font-family: Tahoma; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+        .table { flex: 1; perspective: 1000px; display: flex; justify-content: center; align-items: center; }
+        
+        /* طراحی سه‌بعدی کارت */
+        .card {
+            width: 70px; height: 105px; background: white; color: #333; border-radius: 8px; margin: 0 -10px;
+            transform: rotateX(10deg) rotateY(0deg); transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5); display: flex; flex-direction: column; justify-content: space-between; padding: 5px; font-weight: bold;
+        }
+        .card:hover { transform: translateY(-30px) rotateX(0deg); box-shadow: 0 20px 40px rgba(0,0,0,0.8); }
+        .red { color: #d32f2f; }
+        
+        .hand { display: flex; justify-content: center; padding: 20px; background: rgba(0,0,0,0.2); }
+        .lobby { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: flex; justify-content: center; align-items: center; z-index: 100; }
+        .btn { padding: 15px 30px; background: #ffd700; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="lobby" id="lobby">
+        <button class="btn" onclick="startGame(4)">شروع بازی حرفه‌ای (۴ نفره)</button>
+    </div>
+    
+    <div class="table">
+        <div id="hand" class="hand"></div>
+    </div>
+
+    <script src="game_engine.js"></script>
+    <script>
+        function startGame(mode) {
+            document.getElementById('lobby').style.display = 'none';
+            const game = new HokmGame(mode);
+            game.startInitialDeal();
+            const hand = document.getElementById('hand');
+            game.players[0].forEach(card => {
+                const div = document.createElement('div');
+                div.className = 'card' + (card.isRed() ? ' red' : '');
+                div.innerHTML = `<span>${card.getRankName()}</span><span>${card.suit}</span>`;
+                hand.appendChild(div);
+            });
+        }
+    </script>
+</body>
+</html>
