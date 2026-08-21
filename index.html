@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تخته نرد سنتی و حرفه‌ای</title>
+    <style>
+        body {
+            background-color: #120904;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Tahoma, sans-serif;
+            overflow: hidden;
+        }
+
+        /* کانتینر کل صفحه بازی شامل نوار کناری و تخته */
+        .game-wrapper {
+            display: flex;
+            background-color: #1a3c27; /* رنگ سبز تیره نوارهای کناری مشابه تصویر */
+            border: 8px solid #2c1608;
+            border-radius: 12px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+            width: 950px;
+            height: 580px;
+        }
+
+        /* نوار کناری چپ (اطلاعات بازیکنان و تایمر) */
+        .side-panel {
+            width: 180px;
+            background: radial-gradient(circle, #1e4d30 0%, #12301c 100%);
+            border-left: 4px solid #0d2113;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 10px;
+            color: white;
+        }
+
+        .player-box {
+            text-align: center;
+        }
+
+        .avatar-frame {
+            width: 60px;
+            height: 60px;
+            background: #e0e0e0;
+            border: 3px solid #d4af37; /* حاشیه طلایی */
+            border-radius: 10px;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: #555;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+        }
+
+        .player-name-tag {
+            background: linear-gradient(to bottom, #8b5a2b, #5c3a21);
+            border: 2px solid #d4af37;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            box-shadow: inset 0 2px 3px rgba(255,255,255,0.3);
+        }
+
+        .timer-icon {
+            width: 50px;
+            height: 50px;
+            background: #fff;
+            border: 3px solid #d4af37;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        /* بدنه اصلی تخته نرد */
+        .board-container {
+            flex: 1;
+            background-image: radial-gradient(circle, #5c3a21, #3b220f);
+            border: 12px solid #231207;
+            display: flex;
+            position: relative;
+        }
+
+        /* لولای وسط تخته */
+        .board-container::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 25px;
+            height: 120px;
+            background: linear-gradient(to right, #b8860b, #ffd700, #b8860b);
+            border-radius: 4px;
+            z-index: 10;
+            box-shadow: 0 0 8px rgba(0,0,0,0.7);
+        }
+
+        .board-half {
+            width: 50%;
+            height: 100%;
+            background-color: #e3cbb3; /* رنگ زمینه کرم/بژ ملایم داخل تخته مشابه تصویر */
+            border: 4px inset #b59b82;
+            display: flex;
+            position: relative;
+            padding: 10px;
+        }
+
+        .board-half.left { border-left: 6px solid #231207; }
+        .board-half.right { border-right: 6px solid #231207; }
+
+        /* مثلث‌ها */
+        .points-row {
+            display: flex;
+            width: 100%;
+            height: 48%;
+            position: absolute;
+        }
+
+        .top-row { top: 10px; }
+        .bottom-row { bottom: 10px; }
+
+        .point {
+            flex: 1;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            margin: 0 1px;
+        }
+
+        /* رنگ‌بندی مثلث‌ها مشابه تصویر (سبز تیره و کرم چرمی) */
+        .top-row .point:nth-child(odd), .bottom-row .point:nth-child(even) { background-color: #1e4d30; }
+        .top-row .point:nth-child(even), .bottom-row .point:nth-child(odd) { background-color: #d1b288; }
+
+        .point.spacer {
+            background: transparent !important;
+            flex: 0.4;
+            clip-path: none;
+        }
+
+        .msg {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.75);
+            color: #ffd700;
+            padding: 6px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            border: 1px solid #d4af37;
+            z-index: 20;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-wrapper">
+        <!-- نوار کناری سمت چپ (پنل بازیکنان و تایمر) -->
+        <div class="side-panel">
+            <div class="player-box">
+                <div class="avatar-frame">👤</div>
+                <div class="player-name-tag">ساناز</div>
+            </div>
+
+            <div class="timer-icon">⏳</div>
+
+            <div class="player-box">
+                <div class="player-name-tag">مهران</div>
+                <div class="avatar-frame" style="background: #333; color: #fff;">👨‍💼</div>
+            </div>
+        </div>
+
+        <!-- تخته بازی اصلی -->
+        <div class="board-container">
+            <div class="msg">تاس: 4 و 3 - نوبت سفید (شما)</div>
+
+            <!-- نیمه راست -->
+            <div class="board-half right">
+                <div class="points-row top-row">
+                    <div class="point"></div><div class="point"></div><div class="point"></div>
+                    <div class="point spacer"></div>
+                    <div class="point"></div><div class="point"></div><div class="point"></div>
+                </div>
+                <div class="points-row bottom-row">
+                    <div class="point"></div><div class="point"></div><div class="point"></div>
+                    <div class="point spacer"></div>
+                    <div class="point"></div><div class="point"></div><div class="point"></div>
+                </div>
+            </div>
+
+            <!-- نیمه چپ -->
+            <div class="board-half left">
+                <div class="points-row top-row">
+                    <div class="point"></div><div class="point"></div><div class="point"></div>
+                    <div class="point spacer"></div>
+                    <div class="point"></div><div class="point"></div><div class="point"></div>
+                </div>
+                <div class="points-row bottom-row">
+                    <div class="point"></div><div class="point"></div><div class="point"></div>
+                    <div class="point spacer"></div>
+                    <div class="point"></div><div class="point"></div><div class="point"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
