@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تخته نرد حرفه‌ای - قدم دوم</title>
+    <style>
+        /* تنظیمات کلی صفحه */
+        body {
+            background-color: #2c1608; /* رنگ پس‌زمینه تیره */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden; /* جلوگیری از اسکرول */
+        }
+
+        /* کانتینر اصلی بازی (قاب چوبی) */
+        .game-container {
+            width: 950px;
+            height: 650px;
+            /* بافت چوب تیره و لوکس */
+            background-image: radial-gradient(circle, #5d4037, #3e2723);
+            border: 15px solid #1a0d05; /* قاب بیرونی ضخیم */
+            border-radius: 15px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            display: flex;
+            position: relative;
+        }
+
+        /* لولای فلزی وسط (تزئینی) */
+        .game-container::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 150px;
+            background: linear-gradient(to right, #a1887f, #d7ccc8, #a1887f);
+            border-radius: 15px;
+            z-index: 10;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        /* نیمه راست و چپ تخته */
+        .board-half {
+            width: 450px;
+            height: 100%;
+            display: flex;
+            padding: 15px;
+            position: relative;
+        }
+
+        .left-half { border-right: 10px solid #3e2723; } /* دیواره وسط */
+        .right-half { border-left: 10px solid #3e2723; } /* دیواره وسط */
+
+        /* استایل کلی مثلث‌ها (Points) */
+        .points-row {
+            display: flex;
+            width: 100%;
+            height: 50%; /* هر ردیف نیمی از ارتفاع را می‌گیرد */
+            position: absolute;
+        }
+
+        .top-row { top: 15px; }
+        .bottom-row { bottom: 15px; }
+
+        .point {
+            flex: 1; /* هر مثلث 1/6 فضا را می‌گیرد */
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%); /* شکل هندسی مثلث */
+            margin: 0 2px; /* فاصله خیلی کم بین مثلث‌ها */
+            transition: background-color 0.2s;
+        }
+
+        /* رنگ‌بندی متناوب مثلث‌ها (مشابه تصویر نمونه) */
+        /* ردیف بالا */
+        .top-row .point:nth-child(odd) { background-color: #d2b48c; } /* رنگ روشن (بژ) */
+        .top-row .point:nth-child(even) { background-color: #8b4513; } /* رنگ تیره (قهوه‌ای) */
+
+        /* ردیف پایین (برعکس بالا شروع می‌شود) */
+        .bottom-row .point:nth-child(odd) { background-color: #8b4513; }
+        .bottom-row .point:nth-child(even) { background-color: #d2b48c; }
+        
+        /* ایجاد فضای خالی بین خونه 6 و 7 */
+        .point.spacer {
+            background: transparent !important;
+            flex: 0.5; /* نصف بقیه فضا */
+            clip-path: none;
+        }
+
+        /* استایل موقت برای پیام راهنما */
+        .message {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            color: gold;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-family: Tahoma, sans-serif;
+            z-index: 20;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="message">قدم دوم: طراحی گرافیکی تخته و مثلث‌ها</div>
+
+    <div class="game-container">
+        <!-- نیمه راست تخته -->
+        <div class="board-half right-half">
+            <!-- ردیف بالای سمت راست (خونه‌های 13 تا 18) -->
+            <div class="points-row top-row">
+                <div class="point"></div><div class="point"></div><div class="point"></div>
+                <div class="point spacer"></div> <!-- فضای خالی وسط (بار) -->
+                <div class="point"></div><div class="point"></div><div class="point"></div>
+            </div>
+            <!-- ردیف پایین سمت راست (خونه‌های 19 تا 24) -->
+            <div class="points-row bottom-row">
+                <div class="point"></div><div class="point"></div><div class="point"></div>
+                <div class="point spacer"></div> <!-- فضای خالی وسط (بار) -->
+                <div class="point"></div><div class="point"></div><div class="point"></div>
+            </div>
+        </div>
+
+        <!-- نیمه چپ تخته -->
+        <div class="board-half left-half">
+            <!-- ردیف بالای سمت چپ (خونه‌های 7 تا 12) -->
+            <div class="points-row top-row">
+                <div class="point"></div><div class="point"></div><div class="point"></div>
+                <div class="point spacer"></div> <!-- فضای خالی وسط (بار) -->
+                <div class="point"></div><div class="point"></div><div class="point"></div>
+            </div>
+            <!-- ردیف پایین سمت چپ (خونه‌های 1 تا 6) -->
+            <div class="points-row bottom-row">
+                <div class="point"></div><div class="point"></div><div class="point"></div>
+                <div class="point spacer"></div> <!-- فضای خالی وسط (بار) -->
+                <div class="point"></div><div class="point"></div><div class="point"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
