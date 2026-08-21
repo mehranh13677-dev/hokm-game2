@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حکم حرفه‌ای | کاریز طب</title>
+    <style>
+        * { box-sizing: border-box; user-select: none; }
+        body {
+            margin: 0; padding: 0;
+            background: radial-gradient(circle, #0f4c22 0%, #06260f 100%);
+            color: #fff; font-family: 'Tahoma', sans-serif;
+            height: 100vh; overflow: hidden;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .game-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 20px; background: rgba(0, 0, 0, 0.4);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+        }
+        .score-board {
+            font-size: 14px; background: rgba(0, 0, 0, 0.6);
+            padding: 6px 15px; border-radius: 20px; border: 1px solid #ffd700;
+        }
+        .table-center {
+            flex: 1; perspective: 1000px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 15px;
+        }
+        .message-box {
+            background: rgba(0,0,0,0.7); padding: 10px 20px;
+            border-radius: 12px; font-size: 15px; border: 1px solid rgba(255,215,0,0.5);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5); text-align: center;
+        }
+        /* لابی و پنل انتخاب حکم */
+        .modal {
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9);
+            display: flex; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-box {
+            background: #113f1b; padding: 30px; border-radius: 15px;
+            border: 2px solid #ffd700; text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8); max-width: 320px; width: 90%;
+        }
+        .modal-box h2 { color: #ffd700; margin-top: 0; }
+        .btn-game {
+            display: block; width: 100%; padding: 12px; margin: 10px 0;
+            background: linear-gradient(to bottom, #ffd700, #cca600); color: #000;
+            border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        .suit-btn {
+            display: inline-block; width: 60px; height: 60px; margin: 5px;
+            font-size: 28px; background: #fff; border: none; border-radius: 10px;
+            cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        /* دست کارت‌های ۳بعدی در پایین صفحه */
+        .player-hand {
+            display: flex; justify-content: center; padding: 15px;
+            background: rgba(0, 0, 0, 0.5); min-height: 130px; align-items: flex-end;
+            overflow-x: auto;
+        }
+        .card {
+            width: 60px; height: 90px; background: #fff; color: #333;
+            border-radius: 8px; margin: 0 -8px; padding: 5px;
+            transform: rotateX(12deg); transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+            display: flex; flex-direction: column; justify-content: space-between;
+            font-weight: bold; font-size: 13px; cursor: pointer; flex-shrink: 0;
+        }
+        .card:hover {
+            transform: translateY(-25px) rotateX(0deg);
+            box-shadow: 0 20px 30px rgba(0,0,0,0.8);
+            z-index: 10;
+        }
+        .card.red { color: #d32f2f; }
+    </style>
+</head>
+<body>
+
+    <!-- لابی بازی -->
+    <div id="lobby-modal" class="modal">
+        <div class="modal-box">
+            <h2>بازی حکم کاریز طب</h2>
+            <p style="font-size: 13px; color: #ddd; margin-bottom: 20px;">لطفاً حالت بازی را انتخاب کنید:</p>
+            <button class="btn-game" onclick="startGame(2)">حکم ۲ نفره (تن‌به‌تن)</button>
+            <button class="btn-game" onclick="startGame(4)">حکم ۴ نفره (تیمی)</button>
+        </div>
+    </div>
+
+    <!-- پنل انتخاب حکم (در ابتدا مخفی) -->
+    <div id="trump-modal" class="modal" style="display: none;">
+        <div class="modal-box">
+            <h2>انتخاب حکم</h2>
+            <p style="font-size: 13px; color: #ddd; margin-bottom: 15px;">حاکم عزیز، خال حکم را انتخاب کنید:</p>
+            <div>
+                <button class="suit-btn red" onclick="selectTrump('♥')">♥</button>
+                <button class="suit-btn" onclick="selectTrump('♠')">♠</button>
+                <button class="suit-btn red" onclick="selectTrump('♦')">♦</button>
+                <button class="suit-btn" onclick="selectTrump('♣')">♣</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="game-header">
+        <div class="score-board">ما: <span id="my-score">۰</span> | حریف: <span id="rival-score">۰</span></div>
+        <div id="trump-display" style="font-weight: bold; color: #ffd700;">حکم: نامشخص</div>
+    </div>
+
+    <div class="table-center">
+        <div class="message-box" id="game-status">لطفاً بازی را شروع کنید</div>
+    </div>
+
+    <div class="player-hand" id="player-cards"></div>
+
+    <script src="game_engine.js"></script>
+    <script>
+        let currentGame = null;
+
+        function startGame(mode) {
+            document.getElementById('lobby-modal').style.display = 'none';
+            currentGame = new HokmGame(mode);
+            currentGame.startInitialDeal();
+            
+            renderHand();
+            document.getElementById('game-status').innerText = "۵ کارت اول توزیع شد. حاکم باید حکم را مشخص کند.";
+            
+            // نمایش پنل انتخاب حکم برای حاکم
+            setTimeout(() => {
+                document.getElementById('trump-modal').style.display = 'flex';
+            }, 500);
+
+            history.pushState({inGame: true}, null, location.href);
+        }
+
+        function selectTrump(suit) {
+            currentGame.setTrumpAndDealRest(suit);
+            document.getElementById('trump-modal').style.display = 'none';
+            document.getElementById('trump-display').innerText = "حکم: " + suit;
+            document.getElementById('game-status').innerText = "حکم مشخص شد و باقی کارت‌ها توزیع گردید. بازی شروع شد!";
+            renderHand();
+        }
+
+        function renderHand() {
+            const handContainer = document.getElementById('player-cards');
+            handContainer.innerHTML = '';
+            currentGame.players[0].forEach(card => {
+                const cardDiv = document.createElement('div');
+                cardDiv.className = card.isRed() ? 'card red' : 'card';
+                cardDiv.innerHTML = `<span>${card.getRankName()}</span><span>${card.suit}</span>`;
+                handContainer.appendChild(cardDiv);
+            });
+        }
+    </script>
+</body>
+</html>
